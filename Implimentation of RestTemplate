@@ -29,7 +29,20 @@ spring web dependency:
             return restTemplate.getForObject("https://jsonplaceholder.typicode.com/todos/1", UserResponse.class);
         }
 
-4) Configure RestController as
+4) Create Value Object(Vo) Class:
+
+package com.RestAPI.VO;
+@Data
+public class UserResponse {
+
+    private Integer userId;
+    private Integer id;
+    private String title;
+    private String completed;
+}
+
+
+5) Configure RestController as
 
 
 package com.RestAPI.Controller;
