@@ -1,0 +1,71 @@
+# RestTemplate
+Applied RestTemplate to consume third party dumy API
+implimenation:
+1) Add dependency:
+spring web dependency:
+
+<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+    <version>3.1.5</version>
+</dependency>
+
+2) Create Rest template method with restEmplate method in MainApplication as
+
+ @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
+3) In service layer create Autowire as
+ @Autowired
+    private RestTemplate restTemplate;
+
+ public UserResponse ConsumeAPI(){
+
+            return restTemplate.getForObject("https://jsonplaceholder.typicode.com/todos/1", UserResponse.class);
+        }
+
+4) Create Value Object(Vo) Class:
+
+package com.RestAPI.VO;
+@Data
+public class UserResponse {
+
+    private Integer userId;
+    private Integer id;
+    private String title;
+    private String completed;
+}
+
+
+
+5) Configure RestController as
+
+
+package com.RestAPI.Controller;
+
+import com.RestAPI.Service.ServiceLayer;
+import com.RestAPI.VO.UserResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@org.springframework.web.bind.annotation.RestController
+public class RestController {
+
+    @Autowired
+    private ServiceLayer serviceLayer;
+
+    //http://localhost:8083/
+    @GetMapping("/")
+    public ResponseEntity<UserResponse> getData() {
+        return new ResponseEntity<>( serviceLayer.ConsumeAPI(), HttpStatus.OK);
+
+    }
+
+}
+
+Go in postman use required get and paste url then click send button.
